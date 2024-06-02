@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createUser, getUser, getUsers, loginUser, updateUsernameAndPassword, verifyUser } from "../controller/User";
+import { createUser, forgotPassword, getUser, getUsers, loginUser, resendOTP, resetPassword, updateUsernameAndPassword, verifyUser } from "../controller/User";
 import { APIContextType, Options } from "../types";
 import app from "../app";
 import { settings } from "../config/settings";
@@ -31,8 +31,8 @@ export const UserRoutes = async (options: Options) => {
         response: response,
         em: options.orm.em.fork()
     } as APIContextType));
-    
-    await app.post(`${apiPrefix}/users/verify`, async (
+
+    await app.post(`${apiPrefix}/auth/verify`, async (
         request: Request, response: Response
     ) => await verifyUser({
         request: request,
@@ -47,7 +47,7 @@ export const UserRoutes = async (options: Options) => {
         response: response,
         em: options.orm.em.fork()
     } as APIContextType));
-    
+
     await app.post(`${apiPrefix}/auth/login`, async (
         request: Request, response: Response
     ) => await loginUser({
@@ -56,6 +56,36 @@ export const UserRoutes = async (options: Options) => {
         em: options.orm.em.fork()
     } as APIContextType));
 
+    await app.get(`${apiPrefix}/users/:id`, async (
+        request: Request, response: Response
+    ) => await getUser({
+        request: request,
+        response: response,
+        em: options.orm.em.fork()
+    } as APIContextType));
 
+    await app.post(`${apiPrefix}/auth/resendotp`, async (
+        request: Request, response: Response
+    ) => await resendOTP({
+        request: request,
+        response: response,
+        em: options.orm.em.fork()
+    } as APIContextType));
+ 
+    app.post(`${apiPrefix}/auth/forgotpassword`, async (
+        request: Request, response: Response
+    ) => await forgotPassword({
+        request: request,
+        response: response,
+        em: options.orm.em.fork()
+    } as APIContextType));
+
+    app.post(`${apiPrefix}/auth/resetpassword`, async (
+        request: Request, response: Response
+    ) => await resetPassword({
+        request: request,
+        response: response,
+        em: options.orm.em.fork()
+    } as APIContextType));
 };
 
