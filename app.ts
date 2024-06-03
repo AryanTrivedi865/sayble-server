@@ -17,6 +17,7 @@ app.use(bodyParser.urlencoded({ limit: '500mb', extended: true }));
 
 // Serve static files from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/.well-known',express.static(path.join(__dirname,".well-known")));
 
 // Configure CORS
 applyCors(app);
